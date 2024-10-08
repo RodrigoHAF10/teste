@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalhes da OS #{{ ordem_servico.id }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            color: #333;
+        }
+        .header p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            color: #444;
+        }
+        p {
+            margin: 10px 0;
+        }
+        p strong {
+            font-weight: bold;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .back-button {
+            background-color: #f44336;
+        }
+        .back-button:hover {
+            background-color: #e53935;
+        }
+        .alter-button {
+            background-color: #ff9800;
+        }
+        .alter-button:hover {
+            background-color: #fb8c00;
+        }
+        .status-button {
+            background-color: #008CBA;
+        }
+        .status-button:hover {
+            background-color: #007bb5;
+        }
+        .print-button {
+            background-color: #555;
+        }
+        .print-button:hover {
+            background-color: #333;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .foto-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Empresa XYZ</h1>
+            <p>Relatório de Ordem de Serviço</p>
+            <p>OS #{{ ordem_servico.id }}</p>
+        </div>
+        <div class="section">
+            <h2>Dados do Cliente</h2>
+            <p><strong>Nome:</strong> {{ ordem_servico.cliente.nome }}</p>
+            <p><strong>CNPJ:</strong> {{ ordem_servico.cliente.cnpj }}</p>
+            <p><strong>CEP:</strong> {{ ordem_servico.cliente.cep }}</p>
+            <p><strong>Email:</strong> {{ ordem_servico.cliente.email }}</p>
+            <p><strong>Rua:</strong> {{ ordem_servico.cliente.rua }}</p>
+            <p><strong>Bairro:</strong> {{ ordem_servico.cliente.bairro }}</p>
+            <p><strong>Cidade:</strong> {{ ordem_servico.cliente.cidade }}</p>
+            <p><strong>Estado:</strong> {{ ordem_servico.cliente.estado }}</p>
+            <p><strong>Telefone:</strong> {{ ordem_servico.cliente.telefone }}</p>
+            <p><strong>Site:</strong> <a href="{{ ordem_servico.cliente.site }}" target="_blank">{{ ordem_servico.cliente.site }}</a></p>
+            <p><strong>Observações:</strong> {{ ordem_servico.cliente.observacoes }}</p>
+            <p><strong>Contato:</strong> {{ ordem_servico.cliente.contato }}</p>
+        </div>
+        <div class="section">
+            <h2>Dados do Técnico</h2>
+            <p><strong>Técnico Responsável:</strong> {{ ordem_servico.tecnico_responsavel.username }}</p>
+            <p><strong>Status:</strong> {{ ordem_servico.status }}</p>
+            <p><strong>Data de Término:</strong> {{ ordem_servico.data_termino }}</p>
+            <p><strong>Hora de Término:</strong> {{ ordem_servico.hora_termino }}</p>
+            <p><strong>Descrição Final:</strong> {{ ordem_servico.descricao_final }}</p>
+            <p><strong>Km de Saída:</strong> {{ ordem_servico.km_saida }}</p>
+            <p><strong>Km de Chegada:</strong> {{ ordem_servico.km_chegada }}</p>
+        </div>
+        <div class="section foto-container">
+            <h2>Fotos</h2>
+            {% if ordem_servico.foto %}
+                <img src="{{ ordem_servico.foto.url }}" alt="Foto da OS">
+            {% else %}
+                <p>Sem foto</p>
+            {% endif %}
+        </div>
+        <div class="section">
+            <h2>Alterar Status</h2>
+            <form id="status-form" method="post" action="{% url 'atualizar_status' ordem_servico.id %}">
+                {% csrf_token %}
+                <select name="status" id="status">
+                    <option value="aberto" {% if ordem_servico.status == 'aberto' %}selected{% endif %}>Aberto</option>
+                    <option value="concluido" {% if ordem_servico.status == 'concluido' %}selected{% endif %}>Concluído</option>
+                    <option value="pendente" {% if ordem_servico.status == 'pendente' %}selected{% endif %}>Pendente</option>
+                </select>
+                <button type="button" id="atualizar-status-button" class="status-button">Atualizar Status</button>
+            </form>
+        </div>
+        <div class="buttons">
+            <a href="{% url 'home' %}">
+                <button type="button" class="back-button">Voltar para Home</button>
+            </a>
+            <a href="{% url 'alterar_os' ordem_servico.id %}">
+                <button type="button" class="alter-button">Alterar OS</button>
+            </a>
+            <button type="button" class="print-button" onclick="window.print()">Imprimir</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('atualizar-status-button').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Você tem certeza?',
+                text: "Deseja atualizar o status desta Ordem de Serviço?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, atualizar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('status-form').submit();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

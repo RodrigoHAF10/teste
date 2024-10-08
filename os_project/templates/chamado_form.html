@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Criar Chamado</title>
+</head>
+<body>
+    <h2>Criar Chamado</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Criar Chamado</button>
+    </form>
+</body>
+</html>

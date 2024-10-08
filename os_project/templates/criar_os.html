@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Criar OS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form > div {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 80px; /* Diminuir a altura da caixa de observações */
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .back-button {
+            background-color: #f44336;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #e53935;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Criar OS</h1>
+        <form id="criar-os-form" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_cliente">Cliente:</label>
+                {{ form.cliente }}
+            </div>
+            <div class="form-group">
+                <label for="id_descricao_servico">Descrição do Serviço:</label>
+                {{ form.descricao_servico }}
+            </div>
+            <div class="form-group">
+                <label for="id_observacoes">Observações:</label>
+                {{ form.observacoes }}
+            </div>
+            <div class="form-group">
+                <label for="id_tecnico_responsavel">Técnico Responsável:</label>
+                {{ form.tecnico_responsavel }}
+            </div>
+            <button type="button" id="criar-os-button">Criar OS</button>
+        </form>
+        <a href="{% url 'home' %}">
+            <button type="button" class="back-button">Voltar para Home</button>
+        </a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('criar-os-button').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Você tem certeza?',
+                text: "Deseja criar esta Ordem de Serviço?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, criar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('criar-os-form').submit();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

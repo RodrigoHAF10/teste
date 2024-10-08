@@ -1,0 +1,155 @@
+/* Pagina responsável por mostrar todas as Ordens de serviços criadas */
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 0.9em;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        .section {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .button {
+            background-color: black;
+            color: white;
+            padding: 10px 24px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: green;
+        }
+        .status-menu {
+            display: none;
+        }
+        .lupa-icon {
+            width: 20px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            min-width: 160px;
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+    <script>
+        function toggleStatusMenu(osId) {
+            var menu = document.getElementById('status-menu-' + osId);
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+            } else {
+                menu.style.display = 'none';
+            }
+        }
+
+        function resetSearch() {
+            window.location.href = window.location.pathname;
+        }
+    </script>
+</head>
+<body>
+    {% load static %}
+    <div class="container">
+        <div class="section">
+            <h1>Lista de Ordens de Serviço</h1>
+            <button class="button" onclick="location.href='{% url 'criar_os' %}'">Incluir OS</button>
+            <button class="button" onclick="location.href='{% url 'lista_clientes' %}'">Lista de Clientes</button>
+            <button class="button" onclick="location.href='{% url 'cadastro_cliente' %}'">Cadastro de Cliente</button>
+            <button class="button" onclick="location.href='{% url 'lista_tecnicos' %}'">Lista de Técnicos</button>
+            <button class="button" onclick="location.href='{% url 'cadastro_tecnico' %}'">Cadastro de Técnico</button>
+        </div>
+        <div class="section">
+            <form method="GET" style="display: inline;">
+                {{ form.search_field }}
+                {{ form.search_option }}
+                {{ form.search_date }}
+                {{ form.search_time }}
+                <input type="submit" value="Buscar" class="button">
+            </form>
+            <button class="button" onclick="resetSearch()">Voltar</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ordem de Serviço</th>
+                        <th>ID do Cliente</th>
+                        <th>Nome do Cliente</th>
+                        <th>Data de Criação</th>
+                        <th>Hora de Criação</th>
+                        <th>Status</th>
+                        <th>ID do Técnico</th>
+                        <th>Nome do Técnico</th>
+                        <th>Data de Término</th>
+                        <th>Hora de Término</th>
+                        <th>Relatório</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for os in ordens_servico %}
+                    <tr>
+                        <td>{{ os.0 }}</td>
+                        <td>{{ os.6 }}</td>
+                        <td>{{ os.7 }}</td>
+                        <td>{{ os.1 }}</td>
+                        <td>{{ os.2 }}</td>
+                        <td>{{ os.5 }}</td>
+                        <td>{{ os.8 }}</td>
+                        <td>{{ os.9 }}</td>
+                        <td>{{ os.3 }}</td>
+                        <td>{{ os.4 }}</td>
+                        <td><a href="{% url 'detalhes_os' os.0 %}"><img class="lupa-icon" src="{% static 'imagens/icone_lupa.png' %}" alt="Ícone de Lupa"></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

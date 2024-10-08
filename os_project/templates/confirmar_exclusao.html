@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar Exclusão</title>
+</head>
+<body>
+    <h1>Tem certeza de que deseja excluir a Ordem de Serviço {{ ordem_servico.id }}?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Sim, excluir">
+    </form>
+    <a href="{% url 'detalhes_os' os_id=ordem_servico.id %}">Não, voltar</a>
+</body>
+</html>
